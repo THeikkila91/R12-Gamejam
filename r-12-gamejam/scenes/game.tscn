@@ -1,12 +1,40 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=9 format=3 uid="uid://b7oc5tv2mw0he"]
 
+[ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scenes/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
 [ext_resource type="TileSet" uid="uid://c5bkw5qg0jxxy" path="res://assets/tiles.tres" id="2_yqjtg"]
+[ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
+bg_color = Color(0.10183347, 0.6930257, 0.6138902, 0)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.25792447, 0.9199422, 0.77485317, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
 shader = ExtResource("1_yqjtg")
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iywne"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_p57ef"]
+font = ExtResource("3_lnu2h")
+font_size = 25
+
 [node name="Game" type="Node2D"]
+script = ExtResource("1_lbhrr")
+
+[node name="Frame" type="Panel" parent="."]
+z_index = 3
+offset_left = 408.0
+offset_right = 743.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_lbhrr")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_e2o6t")
@@ -15,12 +43,26 @@ offset_right = 736.0
 offset_bottom = 640.0
 color = Color(0.016763657, 0.034379218, 0.24205396, 1)
 
-[node name="floor" type="ColorRect" parent="ColorRect"]
-layout_mode = 0
-offset_top = 640.0
-offset_right = 32.0
-offset_bottom = 672.0
-
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(416, 4)
 tile_set = ExtResource("2_yqjtg")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 408.0
+offset_top = 4.0
+offset_right = 448.0
+offset_bottom = 44.0
+
+[node name="Timer" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 328.0
+offset_top = 540.0
+offset_right = 488.0
+offset_bottom = 604.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_iywne")
+text = "00:00:00"
+label_settings = SubResource("LabelSettings_p57ef")
+horizontal_alignment = 1
+vertical_alignment = 1

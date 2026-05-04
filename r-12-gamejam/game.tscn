@@ -1,6 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://0s1aek0l1wl5"]
+[gd_scene load_steps=9 format=3 uid="uid://0s1aek0l1wl5"]
 
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://dgi8ysg7a7yf7" path="res://game.gd" id="1_e2o6t"]
+[ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_feb5d"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
 shader = ExtResource("1_80nbo")
@@ -20,7 +22,14 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_feb5d"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_feb5d"]
+font = ExtResource("3_feb5d")
+font_size = 25
+
 [node name="Game" type="Node2D"]
+script = ExtResource("1_e2o6t")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_e2o6t")
@@ -38,3 +47,21 @@ offset_left = 409.0
 offset_right = 744.0
 offset_bottom = 648.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_80nbo")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Timer" type="Label" parent="UI"]
+layout_mode = 0
+offset_left = 736.0
+offset_top = 544.0
+offset_right = 896.0
+offset_bottom = 608.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_feb5d")
+text = "00:00:00"
+label_settings = SubResource("LabelSettings_feb5d")
+horizontal_alignment = 1
+vertical_alignment = 1
