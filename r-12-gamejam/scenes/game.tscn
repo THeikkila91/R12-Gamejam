@@ -1,12 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=6 format=3 uid="uid://b7oc5tv2mw0he"]
 
-[ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_80nbo"]
+[ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
+[ext_resource type="Texture2D" uid="uid://cvluc3jx4w6mx" path="res://assets/tetris-export.png" id="2_lnu2h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
-shader = ExtResource("1_80nbo")
+shader = ExtResource("1_yqjtg")
 
-[sub_resource type="TileSet" id="TileSet_mwb40"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbhrr"]
+texture = ExtResource("2_lnu2h")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_iywne"]
 tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_lbhrr")
 
 [node name="Game" type="Node2D"]
 
@@ -25,4 +39,4 @@ offset_bottom = 672.0
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(416, 4)
-tile_set = SubResource("TileSet_mwb40")
+tile_set = SubResource("TileSet_iywne")
