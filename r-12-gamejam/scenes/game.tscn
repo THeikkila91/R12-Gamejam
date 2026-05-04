@@ -6,7 +6,7 @@
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
-bg_color = Color(0.10183347, 0.6930257, 0.6138902, 0)
+bg_color = Color(0.101960786, 0.69411767, 0.6156863, 0)
 border_width_left = 8
 border_width_top = 8
 border_width_right = 8
@@ -20,11 +20,15 @@ corner_radius_bottom_left = 4
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
 shader = ExtResource("1_yqjtg")
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iywne"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iywne"]
+bg_color = Color(0.25792447, 0.9199422, 0.77485317, 1)
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
 
 [sub_resource type="LabelSettings" id="LabelSettings_p57ef"]
 font = ExtResource("3_lnu2h")
 font_size = 25
+font_color = Color(0, 0, 0, 1)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_lbhrr")
@@ -56,12 +60,14 @@ offset_right = 448.0
 offset_bottom = 44.0
 
 [node name="Timer" type="Label" parent="UI"]
+z_index = -1
 layout_mode = 0
 offset_left = 328.0
 offset_top = 540.0
 offset_right = 488.0
 offset_bottom = 604.0
-theme_override_styles/normal = SubResource("StyleBoxEmpty_iywne")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_iywne")
 text = "00:00:00"
 label_settings = SubResource("LabelSettings_p57ef")
 horizontal_alignment = 1
