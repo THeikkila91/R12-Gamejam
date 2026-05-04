@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://db2qp7fr3pfif"]
+
+[ext_resource type="Texture2D" uid="uid://cvluc3jx4w6mx" path="res://assets/tetris-export.png" id="1_dje6m"]
+
+[node name="L_Block" type="CharacterBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_dje6m")
+hframes = 8
+region_rect = Rect2(0, 0, 256, 32)
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprite2D"]
+position = Vector2(0, 32)
+texture = ExtResource("1_dje6m")
+hframes = 8
+region_rect = Rect2(0, 0, 256, 32)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Sprite2D"]
+position = Vector2(32, 32)
+texture = ExtResource("1_dje6m")
+hframes = 8
+region_rect = Rect2(0, 0, 256, 32)
+
+[node name="Sprite2D3" type="Sprite2D" parent="Sprite2D"]
+position = Vector2(64, 32)
+texture = ExtResource("1_dje6m")
+hframes = 8
+region_rect = Rect2(0, 0, 256, 32)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, 80, 16, 80, 48, -16, 48)
