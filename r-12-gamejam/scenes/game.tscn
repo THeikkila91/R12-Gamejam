@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=10 format=3 uid="uid://b7oc5tv2mw0he"]
 
 [ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scenes/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
 [ext_resource type="TileSet" uid="uid://c5bkw5qg0jxxy" path="res://assets/tiles.tres" id="2_yqjtg"]
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
+[ext_resource type="PackedScene" path="res://l_block.tscn" id="5_iywne"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
 bg_color = Color(0.101960786, 0.69411767, 0.6156863, 0)
@@ -72,3 +73,6 @@ text = "00:00:00"
 label_settings = SubResource("LabelSettings_p57ef")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="L_Block" parent="." instance=ExtResource("5_iywne")]
+position = Vector2(432, 112)
