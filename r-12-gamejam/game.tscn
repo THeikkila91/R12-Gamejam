@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://0s1aek0l1wl5"]
+[gd_scene load_steps=10 format=3 uid="uid://0s1aek0l1wl5"]
 
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://dgi8ysg7a7yf7" path="res://game.gd" id="1_e2o6t"]
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_feb5d"]
+[ext_resource type="PackedScene" path="res://l_block.tscn" id="4_fc0e3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e2o6t"]
 shader = ExtResource("1_80nbo")
@@ -65,3 +66,6 @@ text = "00:00:00"
 label_settings = SubResource("LabelSettings_feb5d")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="L_Block" parent="." instance=ExtResource("4_fc0e3")]
+position = Vector2(433, 73)
