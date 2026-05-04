@@ -10,6 +10,6 @@ void fragment() {
     if (line) {
         COLOR = vec4(0.2, 0.2, 0.2, 1.0); // tumman harmaat borderit
     } else {
-        COLOR = vec4(0.01, 0.06, 0.07, 1.0); // This is your BACKGROUND color (Dark Blue)
+        COLOR = vec4(0.01, 0.06, 0.07, 1.0); // taustan väri
     }
 }
