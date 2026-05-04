@@ -23,8 +23,8 @@ func _ready():
 	var timer = Timer.new()
 	add_child(timer)
 	timer.wait_time = 0.5
-	timer.autostart = true
 	timer.timeout.connect(move_down)
+	timer.start() 
 	spawn_piece()
 
 func _input(event):
