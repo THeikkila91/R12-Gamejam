@@ -1,18 +1,19 @@
-[gd_scene load_steps=10 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=11 format=3 uid="uid://b7oc5tv2mw0he"]
 
 [ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scenes/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
+[ext_resource type="VideoStream" uid="uid://clvt28nji2pqn" path="res://assets/vecteezy_cloudy-sky-animation-animated-clouds-timelapse-in-blue-sky_1956763211.ogv" id="2_p57ef"]
 [ext_resource type="TileSet" uid="uid://c5bkw5qg0jxxy" path="res://assets/tiles.tres" id="2_yqjtg"]
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bs5ha5ll7gk5g" path="res://scripts/ActivePiece.gd" id="4_iywne"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
-bg_color = Color(0.10183347, 0.6930257, 0.6138902, 0)
+bg_color = Color(0.6486645, 0.37951738, 0.10253506, 0)
 border_width_left = 8
 border_width_top = 8
 border_width_right = 8
 border_width_bottom = 8
-border_color = Color(0.25792447, 0.9199422, 0.77485317, 1)
+border_color = Color(0.8156863, 0.29411766, 0.023529412, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -22,7 +23,7 @@ corner_radius_bottom_left = 4
 shader = ExtResource("1_yqjtg")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iywne"]
-bg_color = Color(0.25792447, 0.9199422, 0.77485317, 1)
+bg_color = Color(0.8156863, 0.29411766, 0.023529412, 1)
 corner_radius_top_right = 20
 corner_radius_bottom_right = 20
 
@@ -33,6 +34,20 @@ font_color = Color(0, 0, 0, 1)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_lbhrr")
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
+z_index = -2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+stream = ExtResource("2_p57ef")
+autoplay = true
+expand = true
+loop = true
 
 [node name="Frame" type="Panel" parent="."]
 z_index = 3
