@@ -7,7 +7,7 @@
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bs5ha5ll7gk5g" path="res://scripts/ActivePiece.gd" id="4_iywne"]
 [ext_resource type="AudioStream" uid="uid://1f322omihd2c" path="res://assets/MiConv.com__poorartistt-game-is-on-video-game-music-no-copyright-426131.ogg" id="7_u5sy4"]
-[ext_resource type="Script" uid="uid://cme3xqspym876" path="res://scripts/score_ui.gd" id="8_gee14"]
+[ext_resource type="Script" path="res://scripts/score_ui.gd" id="8_gee14"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
 bg_color = Color(0.6486645, 0.37951738, 0.10253506, 0)
@@ -53,6 +53,13 @@ autoplay = true
 expand = true
 loop = true
 
+[node name="SkyDimmer" type="ColorRect" parent="."]
+offset_left = -7.0
+offset_top = -7.0
+offset_right = 1273.0
+offset_bottom = 729.0
+color = Color(0, 0, 0, 0)
+
 [node name="Frame" type="Panel" parent="."]
 z_index = 3
 offset_left = 465.0
@@ -61,7 +68,7 @@ offset_right = 800.0
 offset_bottom = 680.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_lbhrr")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="gamearea_box" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_e2o6t")
 offset_left = 472.0
 offset_top = 32.0
