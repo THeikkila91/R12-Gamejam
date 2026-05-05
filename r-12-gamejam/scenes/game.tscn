@@ -1,11 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=12 format=3 uid="uid://b7oc5tv2mw0he"]
 
-[ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scenes/game.gd" id="1_lbhrr"]
+[ext_resource type="Script" path="res://scenes/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
 [ext_resource type="VideoStream" uid="uid://clvt28nji2pqn" path="res://assets/vecteezy_cloudy-sky-animation-animated-clouds-timelapse-in-blue-sky_1956763211.ogv" id="2_p57ef"]
 [ext_resource type="TileSet" uid="uid://c5bkw5qg0jxxy" path="res://assets/tiles.tres" id="2_yqjtg"]
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bs5ha5ll7gk5g" path="res://scripts/ActivePiece.gd" id="4_iywne"]
+[ext_resource type="AudioStream" uid="uid://1f322omihd2c" path="res://assets/MiConv.com__poorartistt-game-is-on-video-game-music-no-copyright-426131.ogg" id="7_u5sy4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
 bg_color = Color(0.6486645, 0.37951738, 0.10253506, 0)
@@ -94,3 +95,9 @@ text = "00:00:00"
 label_settings = SubResource("LabelSettings_p57ef")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_u5sy4")
+volume_db = -15.0
+autoplay = true
+parameters/looping = true
