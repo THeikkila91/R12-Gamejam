@@ -15,3 +15,21 @@ func update_timer_display():
 
 	var time_string = "%02d : %02d : %02d" % [mins, secs, mils]
 	time_label.text = "TIME\n" + time_string
+
+
+func _on_h_slider_value_changed(value: float) -> void:
+
+	# ääni
+	if value <= -39:
+		$AudioStreamPlayer.volume_db = -80
+	else:
+		$AudioStreamPlayer.volume_db = value
+
+	# prosentti (ei yli 100%)
+	var percent = clamp(int((value + 40) / 40 * 100), 0, 100)
+
+	$Volume.text = "Volume: " + str(percent) + "%"
+	
+func _ready() -> void:
+	$HSlider.value = -20
+	_on_h_slider_value_changed(-20)
