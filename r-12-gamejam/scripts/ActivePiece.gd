@@ -1,6 +1,6 @@
 extends TileMapLayer
 
-# Viittaus passiiviseen Pohja-kerrokseen
+
 @onready var pohja_layer = $"../Pohja" 
 @onready var next_display = $"../UI/NextPieceDisplay"
 
@@ -9,6 +9,7 @@ var current_pos: Vector2i
 var current_shape: Array
 var current_color_index: int
 var next_pieces_queue: Array = []
+var current_bag: Array = [] 
 
 
 # 8 PALAN MÄÄRITTELY
@@ -153,8 +154,14 @@ func calculate_score(amount: int):
 	
 	
 func add_random_piece_to_queue():
-	var keys = shapes.keys()
-	var random_key = keys[randi() % keys.size()]
+	#pussi on tyhjä, sekoitetaan se
+	if current_bag.is_empty():
+		#lisätään muotojen nimet pussiin
+		current_bag = shapes.keys() 
+		current_bag.shuffle() #sekoitetaan pussukka
+	#nostetaan pussista muoto
+	var random_key = current_bag.pop_back()
+	#lisätään se jonoon
 	next_pieces_queue.append({"type": random_key, "color": randi() % 8})
 
 func draw_next_pieces_display():
