@@ -104,4 +104,46 @@ func lock_piece():
 	for cell in current_shape:
 		pohja_layer.set_cell(current_pos + cell, 0, Vector2i(current_color_index, 0))
 	clear()
+	check_full_rows() 
 	spawn_piece()
+
+func check_full_rows():
+	var rows_cleared = 0
+	var y = 19
+	while y >= 0:
+		var is_full = true
+		for x in range(10):
+			if pohja_layer.get_cell_source_id(Vector2i(x, y)) == -1:
+				is_full = false
+				break
+		
+		if is_full:
+			delete_row_and_shift(y) #tässä tuhotaan ja pudotetaan
+			rows_cleared += 1
+		else:
+			y -= 1
+	
+	if rows_cleared > 0:
+		calculate_score(rows_cleared)
+
+func delete_row_and_shift(row_to_clear: int):
+	# Poisto
+	for x in range(10):
+		pohja_layer.set_cell(Vector2i(x, row_to_clear), -1)
+	
+	#pudotus ylhäältä alas
+	for y in range(row_to_clear, 0, -1):
+		for x in range(10):
+			var source_id = pohja_layer.get_cell_source_id(Vector2i(x, y - 1))
+			var atlas_coords = pohja_layer.get_cell_atlas_coords(Vector2i(x, y - 1))
+			pohja_layer.set_cell(Vector2i(x, y), source_id, atlas_coords)
+			pohja_layer.set_cell(Vector2i(x, y - 1), -1)
+
+func calculate_score(amount: int):
+	var points = 0
+	if amount == 1: points = 100
+	elif amount == 2: points = 300
+	elif amount == 3: points = 500
+	elif amount == 4: points = 800
+	
+	print("Sait ", points, " pistettä! (", amount, " riviä)")
