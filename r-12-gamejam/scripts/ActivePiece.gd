@@ -34,9 +34,33 @@ func _input(event):
 		move_horizontal(1)
 	elif event.is_action_pressed("move_down"):
 		move_down()
+	elif event.is_action_pressed("rotation"): # Palikan rotaatio/kierto
+		rotate_piece()
+
+func rotate_piece():
+	var new_shape = []
+	for cell in current_shape:
+		# Rotaatio: (x, y) -> (-y, x)
+		var rotated_cell = Vector2i(-cell.y, cell.x)
+		new_shape.append(rotated_cell)
+	
+	# Chekkaa seinien collision
+	if can_move_with_shape(current_pos, new_shape):
+		current_shape = new_shape
+		draw_active_piece()
+
+func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
+	for cell in shape_to_test:
+		var map_pos = target_pos + cell
+		if map_pos.x < 0 or map_pos.x >= 10 or map_pos.y >= 20:
+			return false
+		if pohja_layer.get_cell_source_id(map_pos) != -1:
+			return false
+	return true
+
 
 func spawn_piece():
-	current_pos = Vector2i(5, 1)
+	current_pos = Vector2i(5, 0)
 	var keys = shapes.keys()
 	
 	# Arvotaan yksi kahdeksasta palasta
