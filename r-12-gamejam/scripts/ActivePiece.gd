@@ -4,6 +4,8 @@ extends TileMapLayer
 @onready var pohja_layer = $"../Pohja" 
 @onready var next_display = $"../UI/NextPieceDisplay"
 
+signal lines_cleared(points: int, line_count: int)
+signal points_earned(points: int)
 
 var current_pos: Vector2i
 var current_shape: Array
@@ -40,7 +42,7 @@ func _input(event):
 	elif event.is_action_pressed("move_right"):
 		move_horizontal(1)
 	elif event.is_action_pressed("move_down"):
-		move_down()
+		move_down(true) # Päästä 'true' koska pelaajan painama
 	elif event.is_action_pressed("rotation"): # Palikan rotaatio/kierto
 		rotate_piece()
 
@@ -87,11 +89,15 @@ func move_horizontal(dir: int):
 		current_pos = next_pos
 		draw_active_piece()
 
-func move_down():
+func move_down(is_manual: bool = false):
 	var next_pos = current_pos + Vector2i(0, 1)
 	if can_move(next_pos):
 		current_pos = next_pos
 		draw_active_piece()
+		
+		# Jos pelaaja painaa alas, anna 1 piste
+		if is_manual:
+			points_earned.emit(1)
 	else:
 		lock_piece()
 
@@ -150,6 +156,7 @@ func calculate_score(amount: int):
 	elif amount == 3: points = 500
 	elif amount == 4: points = 800
 	
+	lines_cleared.emit(points, amount)
 	print("Sait ", points, " pistettä! (", amount, " rivi)")
 	
 	

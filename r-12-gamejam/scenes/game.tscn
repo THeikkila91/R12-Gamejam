@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=13 format=3 uid="uid://b7oc5tv2mw0he"]
 
 [ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scenes/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bs5ha5ll7gk5g" path="res://scripts/ActivePiece.gd" id="4_iywne"]
 [ext_resource type="AudioStream" uid="uid://1f322omihd2c" path="res://assets/MiConv.com__poorartistt-game-is-on-video-game-music-no-copyright-426131.ogg" id="7_u5sy4"]
+[ext_resource type="Script" uid="uid://cme3xqspym876" path="res://scripts/score_ui.gd" id="8_gee14"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
 bg_color = Color(0.6486645, 0.37951738, 0.10253506, 0)
@@ -125,4 +126,27 @@ offset_bottom = 541.0
 theme_override_colors/font_color = Color(0.13333334, 0.13333334, 0.13333334, 1)
 text = "Volume: 100%"
 
+[node name="ScoreUI" type="CanvasLayer" parent="."]
+script = ExtResource("8_gee14")
+
+[node name="ScoreLabel" type="Label" parent="ScoreUI"]
+offset_left = 327.0
+offset_top = 599.0
+offset_right = 357.0
+offset_bottom = 662.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_lnu2h")
+theme_override_font_sizes/font_size = 25
+
+[node name="LinesLabel" type="Label" parent="ScoreUI"]
+offset_left = 327.0
+offset_top = 540.0
+offset_right = 360.0
+offset_bottom = 604.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_lnu2h")
+theme_override_font_sizes/font_size = 25
+
+[connection signal="lines_cleared" from="ActivePiece" to="ScoreUI" method="_on_lines_cleared"]
+[connection signal="points_earned" from="ActivePiece" to="ScoreUI" method="_on_points_earned"]
 [connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]
