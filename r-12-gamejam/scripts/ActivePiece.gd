@@ -2,10 +2,14 @@ extends TileMapLayer
 
 # Viittaus passiiviseen Pohja-kerrokseen
 @onready var pohja_layer = $"../Pohja" 
+@onready var next_display = $"../UI/NextPieceDisplay"
+
 
 var current_pos: Vector2i
 var current_shape: Array
 var current_color_index: int
+var next_pieces_queue: Array = []
+
 
 # 8 PALAN MÄÄRITTELY
 var shapes = {
@@ -20,6 +24,8 @@ var shapes = {
 }
 
 func _ready():
+	for i in range(3):
+		add_random_piece_to_queue()
 	var timer = Timer.new()
 	add_child(timer)
 	timer.wait_time = 0.5
@@ -60,21 +66,18 @@ func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
 
 
 func spawn_piece():
-	current_pos = Vector2i(5, 0)
-	var keys = shapes.keys()
-	
-	# Arvotaan yksi kahdeksasta palasta
-	current_shape = shapes[keys[randi() % keys.size()]] 
-	
-	# Arvotaan väri (0-7, eli yhteensä 8 eri vaihtoehtoa)
-	current_color_index = randi() % 8 
-	
+	current_pos = Vector2i(5, 1)
+	var next_data = next_pieces_queue.pop_front()
+	current_shape = shapes[next_data["type"]]
+	current_color_index = next_data["color"]
+	add_random_piece_to_queue()
+	draw_next_pieces_display()
 	draw_active_piece()
 
 func draw_active_piece():
 	clear()
 	for cell in current_shape:
-		# Käytetään arvottua väri-indeksiä poimimaan oikea ruutu tilesetistä
+		#käytetään arvottua väri-indeksiä poimimaan oikea ruutu tilesetistä
 		set_cell(current_pos + cell, 0, Vector2i(current_color_index, 0))
 
 func move_horizontal(dir: int):
@@ -146,4 +149,21 @@ func calculate_score(amount: int):
 	elif amount == 3: points = 500
 	elif amount == 4: points = 800
 	
-	print("Sait ", points, " pistettä! (", amount, " riviä)")
+	print("Sait ", points, " pistettä! (", amount, " rivi)")
+	
+	
+func add_random_piece_to_queue():
+	var keys = shapes.keys()
+	var random_key = keys[randi() % keys.size()]
+	next_pieces_queue.append({"type": random_key, "color": randi() % 8})
+
+func draw_next_pieces_display():
+	next_display.clear()
+	var offset_y = 0
+	for piece in next_pieces_queue:
+		var shape_data = shapes[piece["type"]]
+		var color_idx = piece["color"]
+		for cell in shape_data:
+			var draw_pos = Vector2i(2, 2 + offset_y) + cell
+			next_display.set_cell(draw_pos, 0, Vector2i(color_idx, 0))
+		offset_y += 4
