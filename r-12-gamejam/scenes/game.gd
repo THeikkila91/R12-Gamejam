@@ -33,3 +33,5 @@ func _on_h_slider_value_changed(value: float) -> void:
 func _ready() -> void:
 	$HSlider.value = -20
 	_on_h_slider_value_changed(-20)
+	
+	$HSlider.focus_mode = Control.FOCUS_NONE

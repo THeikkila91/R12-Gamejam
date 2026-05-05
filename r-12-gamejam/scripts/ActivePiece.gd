@@ -57,6 +57,8 @@ func rotate_piece():
 	if can_move_with_shape(current_pos, new_shape):
 		current_shape = new_shape
 		draw_active_piece()
+		
+		get_parent().get_node("RotateSound").play()
 
 func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
 	for cell in shape_to_test:
@@ -114,6 +116,7 @@ func lock_piece():
 	for cell in current_shape:
 		pohja_layer.set_cell(current_pos + cell, 0, Vector2i(current_color_index, 0))
 	clear()
+	get_parent().get_node("DropSound").play()
 	check_full_rows() 
 	spawn_piece()
 
@@ -128,6 +131,7 @@ func check_full_rows():
 				break
 		
 		if is_full:
+			get_parent().get_node("ExplodeSound").play()
 			delete_row_and_shift(y) #tässä tuhotaan ja pudotetaan
 			rows_cleared += 1
 		else:
