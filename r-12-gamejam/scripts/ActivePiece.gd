@@ -6,6 +6,11 @@ extends TileMapLayer
 
 signal lines_cleared(points: int, line_count: int)
 signal points_earned(points: int)
+signal level_changed(new_level: int)
+
+var level: int = 1
+var total_lines_cleared: int = 0
+var fall_timer: Timer
 
 var current_pos: Vector2i
 var current_shape: Array
@@ -29,11 +34,11 @@ var shapes = {
 func _ready():
 	for i in range(3):
 		add_random_piece_to_queue()
-	var timer = Timer.new()
-	add_child(timer)
-	timer.wait_time = 0.5
-	timer.timeout.connect(move_down)
-	timer.start() 
+	fall_timer = Timer.new()
+	add_child(fall_timer)
+	fall_timer.wait_time = 0.5
+	fall_timer.timeout.connect(move_down)
+	fall_timer.start() 
 	spawn_piece()
 
 func _input(event):
@@ -153,15 +158,34 @@ func delete_row_and_shift(row_to_clear: int):
 			pohja_layer.set_cell(Vector2i(x, y), source_id, atlas_coords)
 			pohja_layer.set_cell(Vector2i(x, y - 1), -1)
 
+
 func calculate_score(amount: int):
+	total_lines_cleared += amount
+	
 	var points = 0
 	if amount == 1: points = 100
 	elif amount == 2: points = 300
 	elif amount == 3: points = 500
 	elif amount == 4: points = 800
 	
-	lines_cleared.emit(points, amount)
+	var earned_points = points * level
+	lines_cleared.emit(earned_points, amount)
+	
 	print("Sait ", points, " pistettä! (", amount, " rivi)")
+	
+	if total_lines_cleared >= level * 5:
+		level_up()
+	
+func level_up():
+	level += 1
+	
+	# Laske uusi nopeus 
+	# Esimerkki: laske wait_time 10% joka taso, mutta älä mene alle 0.1s
+	var new_speed = 0.5 * pow(0.6, level - 1)
+	fall_timer.wait_time = max(0.0, new_speed)
+	
+	level_changed.emit(level)
+	print("Level Up! Current Level: ", level, " Speed: ", fall_timer.wait_time)
 	
 	
 func add_random_piece_to_queue():

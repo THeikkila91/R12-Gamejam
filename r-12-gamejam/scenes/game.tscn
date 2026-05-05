@@ -7,7 +7,7 @@
 [ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="3_lnu2h"]
 [ext_resource type="Script" uid="uid://bs5ha5ll7gk5g" path="res://scripts/ActivePiece.gd" id="4_iywne"]
 [ext_resource type="AudioStream" uid="uid://1f322omihd2c" path="res://assets/MiConv.com__poorartistt-game-is-on-video-game-music-no-copyright-426131.ogg" id="7_u5sy4"]
-[ext_resource type="Script" path="res://scripts/score_ui.gd" id="8_gee14"]
+[ext_resource type="Script" uid="uid://cme3xqspym876" path="res://scripts/score_ui.gd" id="8_gee14"]
 [ext_resource type="AudioStream" uid="uid://cga03bk852e5i" path="res://Audio/drop.mp3" id="9_kvpfn"]
 [ext_resource type="AudioStream" uid="uid://dw512gyl4t0qd" path="res://Audio/explode.mp3" id="10_dinhu"]
 [ext_resource type="AudioStream" uid="uid://7uuteubcs80r" path="res://Audio/rotate.mp3" id="11_kvuet"]
@@ -147,6 +147,7 @@ offset_bottom = 662.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_lnu2h")
 theme_override_font_sizes/font_size = 25
+text = "Score"
 
 [node name="LinesLabel" type="Label" parent="ScoreUI"]
 offset_left = 327.0
@@ -156,6 +157,17 @@ offset_bottom = 604.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("3_lnu2h")
 theme_override_font_sizes/font_size = 25
+text = "Lines"
+
+[node name="LevelLabel" type="Label" parent="ScoreUI"]
+offset_left = 327.0
+offset_top = 479.0
+offset_right = 396.0
+offset_bottom = 542.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_lnu2h")
+theme_override_font_sizes/font_size = 25
+text = "Level"
 
 [node name="DropSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_kvpfn")
@@ -166,6 +178,7 @@ stream = ExtResource("10_dinhu")
 [node name="RotateSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_kvuet")
 
+[connection signal="level_changed" from="ActivePiece" to="ScoreUI" method="_on_level_changed"]
 [connection signal="lines_cleared" from="ActivePiece" to="ScoreUI" method="_on_lines_cleared"]
 [connection signal="points_earned" from="ActivePiece" to="ScoreUI" method="_on_points_earned"]
 [connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]
