@@ -58,15 +58,16 @@ func show_level_announcement(new_level: int):
 		level_announcer.pivot_offset = level_announcer.size / 2
 		
 		var lt = create_tween()
-		# Appear and "Pop"
+		# ilmestyy
 		lt.set_parallel(true)
 		lt.tween_property(level_announcer, "modulate:a", 1.0, 0.4)
+		#tää antaa tekstin ylikasvaa ja palata takaisin josta syntyy boyncy effekti
 		lt.tween_property(level_announcer, "scale", Vector2(1.3, 1.3), 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		
-		# Wait
+		# hetken tauko että kerkeää lukea
 		lt.set_parallel(false)
 		lt.tween_interval(1.5)
 		
-		# Disappear
+		# häviää näkyvistä
 		lt.tween_property(level_announcer, "modulate:a", 0.0, 0.5)
 		lt.tween_callback(func(): level_announcer.visible = false)
