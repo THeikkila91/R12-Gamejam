@@ -12,10 +12,8 @@ func _ready():
 
 func _process(_delta):
 	if lines_node:
-		# Use the variable from your other script
 		var lines = lines_node.total_lines_cleared
-		
-		# We check from highest to lowest so the code doesn't get "stuck" on Level 2
+		# Eri levelien muutokset taustaan
 		if lines >= 20 and current_level < 5:
 			apply_level_effects(5, 4, 0.8, Color(1, 0, 0))
 		elif lines >= 15 and current_level < 4:
