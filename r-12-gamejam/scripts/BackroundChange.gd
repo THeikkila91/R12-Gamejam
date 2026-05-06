@@ -1,48 +1,48 @@
 extends VideoStreamPlayer
-
-# esiladataan videot
-var level1_vid = preload("res://assets/vecteezy_cloudy-sky-animation-animated-clouds-timelapse-in-blue-sky_1956763211.ogv")
-var level2_vid = preload("res://assets/backround_video3.ogv")
-var level3_vid = preload("res://assets/backround_video3.ogv")
-
-@onready var sky_dimmer = $"../SkyDimmer"
-@onready var scorer_node = $"../ScoreUI" # tällä haetaan total score
+var active_pulse: Tween
+var main_vid = preload("res://assets/video2.ogv")
+@onready var lines_node = $"../ActivePiece"
 
 var current_level = 1
 
 func _ready():
-	stream = level1_vid
+	stream = main_vid
 	play()
+	loop = true 
 
 func _process(_delta):
-	var total_score = scorer_node.total_score
-	
-	# määritetään level scoren mukaan
-	if total_score >= 3000 and current_level < 3:
-		change_to_level(3)
-	elif total_score >= 1500 and current_level < 2:
-		change_to_level(2)
+	if lines_node:
+		# Use the variable from your other script
+		var lines = lines_node.total_lines_cleared
+		
+		# We check from highest to lowest so the code doesn't get "stuck" on Level 2
+		if lines >= 20 and current_level < 5:
+			apply_level_effects(5, 4, 0.8, Color(1, 0, 0))
+		elif lines >= 15 and current_level < 4:
+			apply_level_effects(4, 3, 0.6, Color(1, 0.5, 0))
+		elif lines >= 10 and current_level < 3:
+			apply_level_effects(3, 2, 0.4, Color(0.6, 0, 1))
+			
+		elif lines >= 5 and current_level < 2:
+			apply_level_effects(2, 1, 0.2, Color(0, 0.8, 1))
 
-func change_to_level(new_level: int):
+func apply_level_effects(new_level: int, speed: float, darkness: float, tint: Color):
 	current_level = new_level
 	
-	match new_level:
-		2:
-			update_sky(level2_vid, 0)
-		3:
-			update_sky(level3_vid, 0)
-
-func update_sky(new_video: VideoStream, target_darkness: float):
-	var tween = create_tween()
-	# muuttaa peitteen täysin mustaksi puolessa sekunnissa
-	tween.tween_property(sky_dimmer, "color:a", 1.0, 0.5)
+	var dark_tween = create_tween()
+	dark_tween.tween_property(get_node("../SkyDimmer"), "color:a", darkness, 2.0)
 	
-	# kun peite tumma niin video vaihtuu
-	tween.tween_callback(func():
-		if stream != new_video:
-			stream = new_video
-			play()
-	)
+	var tint_tween = create_tween()
+	tint_tween.tween_property(self, "modulate", tint, 3.0)
 
-	# tummennus hälvenee
-	tween.tween_property(sky_dimmer, "color:a", target_darkness, 1.0)
+	if active_pulse:
+		active_pulse.kill()
+	
+	var pulse_time = 1.0
+	if new_level == 3: pulse_time = 0.8
+	if new_level == 4: pulse_time = 0.6
+	if new_level == 5: pulse_time = 0.4
+	
+	active_pulse = create_tween().set_loops()
+	active_pulse.tween_property(self, "modulate", tint * 1.5, pulse_time)
+	active_pulse.tween_property(self, "modulate", tint, pulse_time)
