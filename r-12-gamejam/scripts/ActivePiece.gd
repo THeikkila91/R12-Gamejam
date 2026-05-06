@@ -131,9 +131,21 @@ func _on_quit_button_pressed():
 
 func draw_active_piece():
 	clear()
+	
+	# 1. Laske haamu palikan paikka (ennakoiva outline)
+	var ghost_pos = current_pos
+	while can_move(ghost_pos + Vector2i(0, 1)):
+		ghost_pos += Vector2i(0, 1)
+		
+	# 2. Piirrä haamu piece
+	for cell in current_shape:
+		set_cell(ghost_pos + cell, 1, Vector2i(current_color_index, 0))
+	
+	# 3. Piirrä oikea "Active Piece"
 	for cell in current_shape:
 		#käytetään arvottua väri-indeksiä poimimaan oikea ruutu tilesetistä
 		set_cell(current_pos + cell, 0, Vector2i(current_color_index, 0))
+
 
 func move_horizontal(dir: int):
 	var next_pos = current_pos + Vector2i(dir, 0)

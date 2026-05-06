@@ -1,6 +1,7 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://c5bkw5qg0jxxy"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://c5bkw5qg0jxxy"]
 
 [ext_resource type="Texture2D" uid="uid://cvluc3jx4w6mx" path="res://assets/tetris-export.png" id="1_8y8ej"]
+[ext_resource type="Texture2D" uid="uid://dc47do3hka7c4" path="res://assets/tetris-export_outline.png" id="2_ms3jd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lbhrr"]
 texture = ExtResource("1_8y8ej")
@@ -14,6 +15,19 @@ texture_region_size = Vector2i(32, 32)
 6:0/0 = 0
 7:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x1i2l"]
+texture = ExtResource("2_ms3jd")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+
 [resource]
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_lbhrr")
+sources/1 = SubResource("TileSetAtlasSource_x1i2l")
