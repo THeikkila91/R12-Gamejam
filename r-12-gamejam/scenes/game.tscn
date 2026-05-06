@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=21 format=3 uid="uid://b7oc5tv2mw0he"]
 
 [ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scenes/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
@@ -12,6 +12,10 @@
 [ext_resource type="AudioStream" uid="uid://cga03bk852e5i" path="res://Audio/drop.mp3" id="9_kvpfn"]
 [ext_resource type="AudioStream" uid="uid://dw512gyl4t0qd" path="res://Audio/explode.mp3" id="10_dinhu"]
 [ext_resource type="AudioStream" uid="uid://7uuteubcs80r" path="res://Audio/rotate.mp3" id="11_kvuet"]
+[ext_resource type="AudioStream" uid="uid://0qx7tg2u51rc" path="res://levelup.mp3" id="13_trtic"]
+[ext_resource type="AudioStream" uid="uid://b4ewfffnt54f6" path="res://Gameover.mp3" id="14_ir15t"]
+[ext_resource type="AudioStream" uid="uid://74k1qh2n0kbx" path="res://Hover.mp3" id="15_ca42v"]
+[ext_resource type="AudioStream" uid="uid://knos4hi6auq5" path="res://Buttonpress.mp3" id="16_rysoc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbhrr"]
 bg_color = Color(0.6486645, 0.37951738, 0.10253506, 0)
@@ -249,10 +253,25 @@ stream = ExtResource("10_dinhu")
 
 [node name="RotateSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_kvuet")
+pitch_scale = 4.0
+
+[node name="LevelupSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_trtic")
+
+[node name="GameoverSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_ir15t")
+
+[node name="HoverSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_ca42v")
+
+[node name="ButtonpressSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_rysoc")
 
 [connection signal="level_changed" from="ActivePiece" to="ScoreUI" method="_on_level_changed"]
 [connection signal="lines_cleared" from="ActivePiece" to="ScoreUI" method="_on_lines_cleared"]
 [connection signal="points_earned" from="ActivePiece" to="ScoreUI" method="_on_points_earned"]
+[connection signal="mouse_entered" from="UI/GameOverMenu/VBoxContainer/RetryButton" to="ActivePiece" method="_on_retry_button_mouse_entered"]
 [connection signal="pressed" from="UI/GameOverMenu/VBoxContainer/RetryButton" to="ActivePiece" method="_on_retry_button_pressed"]
+[connection signal="mouse_entered" from="UI/GameOverMenu/VBoxContainer/QuitButton" to="ActivePiece" method="_on_quit_button_mouse_entered"]
 [connection signal="pressed" from="UI/GameOverMenu/VBoxContainer/QuitButton" to="ActivePiece" method="_on_quit_button_pressed"]
 [connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]

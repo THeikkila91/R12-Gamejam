@@ -186,6 +186,7 @@ func draw_hold_display():
 
 func game_over():
 	print("Peli loppui!")
+	get_parent().get_node("GameoverSound").play()
 	#peli pysähtyy
 	set_process(false) 
 	fall_timer.stop() 
@@ -195,10 +196,19 @@ func game_over():
 	
 #nappulat
 func _on_retry_button_pressed():
+	get_parent().get_node("ButtonpressSound").play()
+	await get_tree().create_timer(0.1).timeout
 	get_tree().reload_current_scene()
 func _on_quit_button_pressed():
+	get_parent().get_node("ButtonpressSound").play()
+	await get_tree().create_timer(0.1).timeout
 	get_tree().quit()
 	
+func _on_retry_button_mouse_entered():
+	get_parent().get_node("HoverSound").play()
+
+func _on_quit_button_mouse_entered():
+	get_parent().get_node("HoverSound").play()
 
 func draw_active_piece():
 	clear()
@@ -312,6 +322,7 @@ func calculate_score(amount: int):
 func level_up():
 	level += 1
 	
+	get_parent().get_node("LevelupSound").play()
 	# Laske uusi nopeus 
 	# Esimerkki: laske wait_time 10% joka taso, mutta älä mene alle 0.1s
 	var new_speed = 0.5 * pow(0.6, level - 1)
