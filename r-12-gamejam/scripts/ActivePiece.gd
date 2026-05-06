@@ -1,6 +1,7 @@
 extends TileMapLayer
 
-
+@onready var score_popup = $"../ScoreUI/ScorePopUp"
+var points_tween: Tween
 @onready var pohja_layer = $"../Pohja" 
 @onready var next_display = $"../UI/NextPieceDisplay"
 @onready var game_over_menu = $"../UI/GameOverMenu"
@@ -214,7 +215,8 @@ func calculate_score(amount: int):
 	var earned_points = points * level
 	lines_cleared.emit(earned_points, amount)
 	
-	print("Sait ", points, " pistettä! (", amount, " rivi)")
+	print("You got ", points, " points!")
+	show_points_popup(earned_points)
 	
 	if total_lines_cleared >= level * 5:
 		level_up()
@@ -252,3 +254,23 @@ func draw_next_pieces_display():
 			var draw_pos = Vector2i(2, 2 + offset_y) + cell
 			next_display.set_cell(draw_pos, 0, Vector2i(color_idx, 0))
 		offset_y += 4
+		
+func show_points_popup(value: int):
+	if score_popup:
+		score_popup.text = "+" + str(value)
+		score_popup.visible = true
+		score_popup.modulate.a = 1.0 
+		
+		if points_tween:
+			points_tween.kill()
+			
+		points_tween = create_tween()
+		
+		points_tween.set_parallel(true)
+		points_tween.tween_property(score_popup, "modulate:a", 0.0, 1.5)
+		
+		points_tween.set_parallel(false)
+		score_popup.scale = Vector2(0.5, 0.5)
+		points_tween.tween_property(score_popup, "scale", Vector2(1.2, 1.2), 0.2)
+		
+		points_tween.tween_callback(func(): score_popup.visible = false)
