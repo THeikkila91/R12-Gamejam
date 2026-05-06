@@ -3,6 +3,7 @@ extends TileMapLayer
 
 @onready var pohja_layer = $"../Pohja" 
 @onready var next_display = $"../UI/NextPieceDisplay"
+@onready var game_over_menu = $"../UI/GameOverMenu"
 
 signal lines_cleared(points: int, line_count: int)
 signal points_earned(points: int)
@@ -85,7 +86,6 @@ func _process(delta):
 			move_horizontal(move_dir)
 			time_since_move = 0.0
 	else:
-		# Nollataan laskurit kun nappi päästetään irti
 		move_held_time = 0.0
 		time_since_move = 0.0
 	
@@ -105,9 +105,28 @@ func spawn_piece():
 	var next_data = next_pieces_queue.pop_front()
 	current_shape = shapes[next_data["type"]]
 	current_color_index = next_data["color"]
+	if not can_move(current_pos):
+		game_over()
+		return
 	add_random_piece_to_queue()
 	draw_next_pieces_display()
 	draw_active_piece()
+	
+func game_over():
+	print("Peli loppui!")
+	#peli pysähtyy
+	set_process(false) 
+	fall_timer.stop() 
+	#valikko näkyviin
+	game_over_menu.show()
+
+	
+#nappulat
+func _on_retry_button_pressed():
+	get_tree().reload_current_scene()
+func _on_quit_button_pressed():
+	get_tree().quit()
+	
 
 func draw_active_piece():
 	clear()
