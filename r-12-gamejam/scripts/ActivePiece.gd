@@ -18,6 +18,12 @@ var current_color_index: int
 var next_pieces_queue: Array = []
 var current_bag: Array = [] 
 
+var move_delay = 0.15
+var move_interval = 0.05
+var time_since_move = 0.0
+var move_held_time = 0.0
+var move_down_timer = 0.0
+
 
 # 8 PALAN MÄÄRITTELY
 var shapes = {
@@ -42,13 +48,7 @@ func _ready():
 	spawn_piece()
 
 func _input(event):
-	if event.is_action_pressed("move_left"):
-		move_horizontal(-1)
-	elif event.is_action_pressed("move_right"):
-		move_horizontal(1)
-	elif event.is_action_pressed("move_down"):
-		move_down(true) # Päästä 'true' koska pelaajan painama
-	elif event.is_action_pressed("rotation"): # Palikan rotaatio/kierto
+	if event.is_action_pressed("rotation"):
 		rotate_piece()
 
 func rotate_piece():
@@ -57,13 +57,38 @@ func rotate_piece():
 		# Rotaatio: (x, y) -> (-y, x)
 		var rotated_cell = Vector2i(-cell.y, cell.x)
 		new_shape.append(rotated_cell)
-	
 	# Chekkaa seinien collision
 	if can_move_with_shape(current_pos, new_shape):
 		current_shape = new_shape
 		draw_active_piece()
 		
 		get_parent().get_node("RotateSound").play()
+		
+func _process(delta):
+	time_since_move += delta
+	if Input.is_action_pressed("move_down"):
+		#tämä saa palikan tippumaan vauhdilla
+		move_down_timer += delta * 10
+		if move_down_timer > fall_timer.wait_time:
+			move_down(true)
+			move_down_timer = 0
+	
+	var move_dir = 0
+	if Input.is_action_pressed("move_left"):
+		move_dir = -1
+	elif Input.is_action_pressed("move_right"):
+		move_dir = 1
+	
+	if move_dir != 0:
+		move_held_time += delta
+		if move_held_time == delta or (move_held_time > move_delay and time_since_move > move_interval):
+			move_horizontal(move_dir)
+			time_since_move = 0.0
+	else:
+		# Nollataan laskurit kun nappi päästetään irti
+		move_held_time = 0.0
+		time_since_move = 0.0
+	
 
 func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
 	for cell in shape_to_test:
@@ -146,10 +171,9 @@ func check_full_rows():
 		calculate_score(rows_cleared)
 
 func delete_row_and_shift(row_to_clear: int):
-	# Poisto
+	#poisto
 	for x in range(10):
 		pohja_layer.set_cell(Vector2i(x, row_to_clear), -1)
-	
 	#pudotus ylhäältä alas
 	for y in range(row_to_clear, 0, -1):
 		for x in range(10):
