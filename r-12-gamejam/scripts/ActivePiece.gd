@@ -52,6 +52,18 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("rotation"):
 		rotate_piece()
+	
+	# Insta pudotus
+	elif event.is_action_pressed("hard_drop"):
+		hard_drop()
+
+func hard_drop():
+	while can_move(current_pos + Vector2i(0, 1)):
+		current_pos += Vector2i(0, 1)
+		# Antaa 2 pistettä per solu
+		points_earned.emit(2)
+		
+	lock_piece()
 
 func rotate_piece():
 	var new_shape = []
