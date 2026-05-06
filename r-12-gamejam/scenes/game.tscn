@@ -172,6 +172,16 @@ theme_override_fonts/font = ExtResource("3_lnu2h")
 theme_override_font_sizes/font_size = 25
 text = "Level"
 
+[node name="ScorePopUp" type="Label" parent="ScoreUI"]
+offset_left = 832.0
+offset_top = 288.0
+offset_right = 1032.0
+offset_bottom = 388.0
+pivot_offset = Vector2(100, 50)
+theme_override_colors/font_color = Color(0.6836896, 0.08530989, 1.00474786e-07, 1)
+theme_override_fonts/font = ExtResource("3_lnu2h")
+theme_override_font_sizes/font_size = 40
+
 [node name="DropSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_kvpfn")
 
