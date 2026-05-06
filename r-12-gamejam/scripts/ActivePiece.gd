@@ -5,6 +5,7 @@ var points_tween: Tween
 @onready var pohja_layer = $"../Pohja" 
 @onready var next_display = $"../UI/NextPieceDisplay"
 @onready var game_over_menu = $"../UI/GameOverMenu"
+@onready var hold_display = $"../UI/HoldPieceDisplay"
 
 signal lines_cleared(points: int, line_count: int)
 signal points_earned(points: int)
@@ -13,6 +14,11 @@ signal level_changed(new_level: int)
 var level: int = 1
 var total_lines_cleared: int = 0
 var fall_timer: Timer
+var held_piece_data = null
+var can_swap: bool = true
+var lock_delay_timer: float = 0.0
+var lock_delay_max: float = 0.5
+var is_touching_ground: bool = false
 
 var current_pos: Vector2i
 var current_shape: Array
@@ -52,10 +58,12 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("rotation"):
 		rotate_piece()
-	
 	# Insta pudotus
 	elif event.is_action_pressed("hard_drop"):
 		hard_drop()
+	# Palikan vaihto
+	elif event.is_action_pressed("swap_piece"):
+		swap_piece()
 
 func hard_drop():
 	while can_move(current_pos + Vector2i(0, 1)):
@@ -74,15 +82,16 @@ func rotate_piece():
 	# Chekkaa seinien collision
 	if can_move_with_shape(current_pos, new_shape):
 		current_shape = new_shape
+		if is_touching_ground:
+			lock_delay_timer = 0.0
 		draw_active_piece()
-		
 		get_parent().get_node("RotateSound").play()
 		
 func _process(delta):
 	time_since_move += delta
 	if Input.is_action_pressed("move_down"):
 		#tämä saa palikan tippumaan vauhdilla
-		move_down_timer += delta * 10
+		move_down_timer += delta * 9
 		if move_down_timer > fall_timer.wait_time:
 			move_down(true)
 			move_down_timer = 0
@@ -101,6 +110,18 @@ func _process(delta):
 	else:
 		move_held_time = 0.0
 		time_since_move = 0.0
+	
+	# LUKITUKSEN VIIVELOGIIKKA
+	if is_touching_ground:
+		lock_delay_timer += delta
+		if lock_delay_timer >= lock_delay_max:
+			lock_piece()
+			is_touching_ground = false
+			lock_delay_timer = 0.0
+	
+	if is_touching_ground and can_move(current_pos + Vector2i(0, 1)):
+		is_touching_ground = false
+		lock_delay_timer = 0.0
 	
 
 func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
@@ -124,7 +145,45 @@ func spawn_piece():
 	add_random_piece_to_queue()
 	draw_next_pieces_display()
 	draw_active_piece()
+
+func swap_piece():
+	if not can_swap:
+		return
 	
+	clear()
+	
+	var old_current_data = {"type": get_current_type_name(), "color": current_color_index}
+	
+	if held_piece_data == null: # Ensimmäinen vaihto hold laatikkoon ja luo uuden palikan
+		held_piece_data = old_current_data
+		spawn_piece()
+	else:
+		# Seuraavat vaihdot: vaihtaa nykyisen ja hold laatikossa olevan
+		var temp = held_piece_data
+		held_piece_data = old_current_data
+		# Vaihtaa hold laatikosta nykyiseen
+		current_pos = Vector2i(5, 1)
+		current_shape = shapes[temp["type"]]
+		current_color_index = temp["color"]
+		draw_active_piece()
+	
+	can_swap = false # Lukitse vaihtaminen kunnes seuraava palikka on maassa (lukittu)
+	draw_hold_display()
+
+func get_current_type_name() -> String:
+	for key in shapes.keys():
+		if shapes[key] == current_shape:
+			return key
+	return "I"
+
+func draw_hold_display():
+	if hold_display and held_piece_data:
+		hold_display.clear()
+		var shape_data = shapes[held_piece_data["type"]]
+		var color_idx = held_piece_data["color"]
+		for cell in shape_data:
+			hold_display.set_cell(Vector2i(2, 2) + cell, 0, Vector2i(color_idx, 0))
+
 func game_over():
 	print("Peli loppui!")
 	#peli pysähtyy
@@ -163,6 +222,8 @@ func move_horizontal(dir: int):
 	var next_pos = current_pos + Vector2i(dir, 0)
 	if can_move(next_pos):
 		current_pos = next_pos
+		if is_touching_ground:
+			lock_delay_timer = 0.0
 		draw_active_piece()
 
 func move_down(is_manual: bool = false):
@@ -170,12 +231,14 @@ func move_down(is_manual: bool = false):
 	if can_move(next_pos):
 		current_pos = next_pos
 		draw_active_piece()
+		is_touching_ground = false
+		lock_delay_timer = 0.0 
 		
 		# Jos pelaaja painaa alas, anna 1 piste
 		if is_manual:
 			points_earned.emit(1)
 	else:
-		lock_piece()
+		is_touching_ground = true
 
 func can_move(target_pos: Vector2i) -> bool:
 	for cell in current_shape:
@@ -191,7 +254,8 @@ func lock_piece():
 		pohja_layer.set_cell(current_pos + cell, 0, Vector2i(current_color_index, 0))
 	clear()
 	get_parent().get_node("DropSound").play()
-	check_full_rows() 
+	check_full_rows()
+	can_swap = true # Mahdollistaa vaihdon seuraavalle palikalle 
 	spawn_piece()
 
 func check_full_rows():

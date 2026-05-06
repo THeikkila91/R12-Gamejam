@@ -162,6 +162,10 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Quit"
 
+[node name="HoldPieceDisplay" type="TileMapLayer" parent="UI"]
+position = Vector2(420, 0)
+tile_set = ExtResource("2_yqjtg")
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_u5sy4")
 volume_db = -15.0
