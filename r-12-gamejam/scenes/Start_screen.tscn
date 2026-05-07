@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://ce0202aor4yfr"]
+
+[ext_resource type="VideoStream" uid="uid://7iss1dvww4kt" path="res://assets/video2.ogv" id="1_g4k3v"]
+[ext_resource type="Script" uid="uid://dxhhedvhbhonk" path="res://scripts/StartScreenScript.gd" id="1_m00xo"]
+[ext_resource type="FontFile" uid="uid://chahbhsabnvip" path="res://ARCADECLASSIC.TTF" id="2_fn4xd"]
+
+[node name="StartScreen" type="CanvasLayer"]
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
+z_index = -2
+offset_right = 1280.0
+offset_bottom = 720.0
+stream = ExtResource("1_g4k3v")
+autoplay = true
+expand = true
+loop = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 256.0
+offset_top = 320.0
+offset_right = 992.0
+offset_bottom = 576.0
+size_flags_horizontal = 4
+script = ExtResource("1_m00xo")
+
+[node name="Start_Game" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.6836896, 0.08530989, 1.00474786e-07, 1)
+theme_override_fonts/font = ExtResource("2_fn4xd")
+theme_override_font_sizes/font_size = 50
+text = "START GAME"
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.6836896, 0.08530989, 1.00474786e-07, 1)
+theme_override_fonts/font = ExtResource("2_fn4xd")
+theme_override_font_sizes/font_size = 50
+text = "QUIT"
+
+[connection signal="pressed" from="VBoxContainer/Start_Game" to="VBoxContainer" method="_on_start_game_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="VBoxContainer" method="_on_quit_pressed"]
