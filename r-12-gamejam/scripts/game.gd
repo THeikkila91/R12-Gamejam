@@ -1,11 +1,16 @@
 extends Node2D
 
 var total_time = 0.0
+var is_running = true
 @onready var time_label = $UI/Timer
 
 func _process(delta):
-	total_time += delta
-	update_timer_display()
+	if is_running:
+		total_time += delta
+		update_timer_display()
+
+func stop_timer():
+	is_running = false
 
 func update_timer_display():
 	var mils = fmod(total_time, 1.0) * 100
