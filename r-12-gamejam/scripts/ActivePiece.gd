@@ -6,6 +6,7 @@ var points_tween: Tween
 @onready var next_display = $"../UI/NextPieceDisplay"
 @onready var game_over_menu = $"../UI/GameOverMenu"
 @onready var hold_display = $"../UI/HoldPieceDisplay"
+@onready var pause_menu = $"../UI/PauseMenu"
 
 signal lines_cleared(points: int, line_count: int)
 signal points_earned(points: int)
@@ -88,6 +89,8 @@ func rotate_piece():
 		get_parent().get_node("RotateSound").play()
 		
 func _process(delta):
+	if Input.is_action_just_pressed("ui_cancel"):
+		pause_game()
 	time_since_move += delta
 	if Input.is_action_pressed("move_down"):
 		#tämä saa palikan tippumaan vauhdilla
@@ -95,7 +98,6 @@ func _process(delta):
 		if move_down_timer > fall_timer.wait_time:
 			move_down(true)
 			move_down_timer = 0
-	
 	var move_dir = 0
 	if Input.is_action_pressed("move_left"):
 		move_dir = -1
@@ -122,7 +124,21 @@ func _process(delta):
 	if is_touching_ground and can_move(current_pos + Vector2i(0, 1)):
 		is_touching_ground = false
 		lock_delay_timer = 0.0
-	
+
+func pause_game():
+	# Näytetään pause-valikko (Varmista että polku on oikea!)
+	# Jos PauseMenu on UI-noden alla: $"../UI/PauseMenu".show()
+	var pause_menu = get_tree().root.find_child("PauseMenu", true, false)
+	if pause_menu:
+		pause_menu.show()
+		get_tree().paused = true
+
+func _on_continue_button_pressed():
+	# Tämä funktio kytketään Continue-napin 'pressed'-signaaliin
+	var pause_menu = get_tree().root.find_child("PauseMenu", true, false)
+	if pause_menu:
+		pause_menu.hide()
+	get_tree().paused = false
 
 func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
 	for cell in shape_to_test:
@@ -186,27 +202,24 @@ func draw_hold_display():
 
 func game_over():
 	print("Peli loppui!")
-	
-	# 1. Soitetaan ääni
+	#soitetaan ääni
 	get_parent().get_node("GameoverSound").play()
-	
-	# 2. Pysäytetään ajastin (kutsutaan sitä uutta funktiota isäntäskriptistä)
+	#pysäytetään ajastin
 	if get_parent().has_method("stop_timer"):
 		get_parent().stop_timer()
 	else:
-		# Jos et lisännyt stop_timer-funktiota, voit myös muuttaa muuttujaa suoraan:
 		get_parent().is_running = false
-
-	# 3. Pysäytetään itse palikan toiminta
+	#palikoiden pysäytys
 	set_process(false) 
 	fall_timer.stop() 
 	#gameover ruutu näkyviin 
 	if game_over_menu:
 		game_over_menu.show()
-
 	
 #nappulat
 func _on_retry_button_pressed():
+	#ottaa paussin pois
+	get_tree().paused = false
 	get_parent().get_node("ButtonpressSound").play()
 	await get_tree().create_timer(0.1).timeout
 	get_tree().reload_current_scene()
