@@ -116,10 +116,19 @@ func _process(delta):
 	# LUKITUKSEN VIIVELOGIIKKA
 	if is_touching_ground:
 		lock_delay_timer += delta
+		
+		# pulssi palikoihin maassa
+		var pulse = (sin(Time.get_ticks_msec() * 0.02) + 1.0) / 2.0
+		# pulssi 0.4 (himmeä) to 1.0 (kirkas)
+		var alpha = lerp(0.4, 1.0, pulse)
+		self.modulate.a = alpha
+		
+		
 		if lock_delay_timer >= lock_delay_max:
 			lock_piece()
 			is_touching_ground = false
 			lock_delay_timer = 0.0
+			self.modulate.a = 1.0
 	
 	if is_touching_ground and can_move(current_pos + Vector2i(0, 1)):
 		is_touching_ground = false
