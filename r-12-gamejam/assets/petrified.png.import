@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1cybbah4ofd3"
-path="res://.godot/imported/tetrified.png-80ef9cf1864e4592712d204d549bfc37.ctex"
+uid="uid://b3es6lo4rwckm"
+path="res://.godot/imported/petrified.png-0b8b76beebe3e54c4f2844caa382747e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tetrified.png"
-dest_files=["res://.godot/imported/tetrified.png-80ef9cf1864e4592712d204d549bfc37.ctex"]
+source_file="res://assets/petrified.png"
+dest_files=["res://.godot/imported/petrified.png-0b8b76beebe3e54c4f2844caa382747e.ctex"]
 
 [params]
 
