@@ -186,12 +186,23 @@ func draw_hold_display():
 
 func game_over():
 	print("Peli loppui!")
+	
+	# 1. Soitetaan ääni
 	get_parent().get_node("GameoverSound").play()
-	#peli pysähtyy
+	
+	# 2. Pysäytetään ajastin (kutsutaan sitä uutta funktiota isäntäskriptistä)
+	if get_parent().has_method("stop_timer"):
+		get_parent().stop_timer()
+	else:
+		# Jos et lisännyt stop_timer-funktiota, voit myös muuttaa muuttujaa suoraan:
+		get_parent().is_running = false
+
+	# 3. Pysäytetään itse palikan toiminta
 	set_process(false) 
 	fall_timer.stop() 
-	#valikko näkyviin
-	game_over_menu.show()
+	#gameover ruutu näkyviin 
+	if game_over_menu:
+		game_over_menu.show()
 
 	
 #nappulat
