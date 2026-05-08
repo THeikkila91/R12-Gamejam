@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=29 format=3 uid="uid://b7oc5tv2mw0he"]
 
 [ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scripts/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bs5ha5ll7gk5g" path="res://scripts/ActivePiece.gd" id="4_iywne"]
 [ext_resource type="AudioStream" uid="uid://1f322omihd2c" path="res://assets/MiConv.com__poorartistt-game-is-on-video-game-music-no-copyright-426131.ogg" id="7_u5sy4"]
 [ext_resource type="Script" uid="uid://cme3xqspym876" path="res://scripts/score_ui.gd" id="8_gee14"]
+[ext_resource type="Texture2D" uid="uid://cvl3673a7x3dc" path="res://assets/pause-button.png" id="8_rysoc"]
 [ext_resource type="AudioStream" uid="uid://cga03bk852e5i" path="res://Audio/drop.mp3" id="9_kvpfn"]
 [ext_resource type="AudioStream" uid="uid://dw512gyl4t0qd" path="res://Audio/explode.mp3" id="10_dinhu"]
 [ext_resource type="AudioStream" uid="uid://7uuteubcs80r" path="res://Audio/rotate.mp3" id="11_kvuet"]
@@ -41,6 +42,55 @@ corner_radius_bottom_right = 20
 font = ExtResource("3_lnu2h")
 font_size = 25
 font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ssvqc"]
+bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1kice"]
+bg_color = Color(0.26666668, 0.26666668, 0.26666668, 0.6431373)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_264po"]
+bg_color = Color(0.26657522, 0.2665752, 0.2665752, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rysoc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ssvqc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rysoc"]
+bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.6)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8156863, 0.29411766, 0.023529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ca42v"]
+bg_color = Color(0.03137255, 0.03137255, 0.03137255, 0.6)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8156863, 0.29411766, 0.023529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="Game" type="Node2D"]
 position = Vector2(7, 7)
@@ -117,7 +167,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="NextPieceDisplay" type="TileMapLayer" parent="UI"]
-position = Vector2(-237, -3)
+position = Vector2(-130, 10)
 tile_set = ExtResource("2_yqjtg")
 
 [node name="GameOverMenu" type="ColorRect" parent="UI"]
@@ -220,8 +270,71 @@ size_flags_horizontal = 4
 text = "Quit"
 
 [node name="HoldPieceDisplay" type="TileMapLayer" parent="UI"]
-position = Vector2(420, 0)
+position = Vector2(400, 20)
 tile_set = ExtResource("2_yqjtg")
+
+[node name="PauseButton" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 742.0
+offset_top = 575.0
+offset_right = 823.0
+offset_bottom = 656.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_ssvqc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1kice")
+theme_override_styles/hover = SubResource("StyleBoxFlat_264po")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_rysoc")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ssvqc")
+
+[node name="TextureButton" type="TextureButton" parent="UI/PauseButton"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 8.00001
+offset_right = 30.077148
+offset_bottom = 8.00001
+scale = Vector2(0.13, 0.13)
+disabled = true
+texture_normal = ExtResource("8_rysoc")
+ignore_texture_size = true
+
+[node name="HoldPanel" type="PanelContainer" parent="UI"]
+z_index = -1
+layout_mode = 0
+offset_left = 397.0
+offset_right = 586.0
+offset_bottom = 173.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_rysoc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/HoldPanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/HoldPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_lnu2h")
+theme_override_font_sizes/font_size = 30
+text = "Hold"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextPiecePanel" type="PanelContainer" parent="UI"]
+z_index = -1
+layout_mode = 0
+offset_left = -135.0
+offset_right = 38.0
+offset_bottom = 426.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ca42v")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/NextPiecePanel"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/NextPiecePanel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_lnu2h")
+theme_override_font_sizes/font_size = 30
+text = "Next
+"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_u5sy4")
@@ -333,4 +446,6 @@ stream = ExtResource("16_rysoc")
 [connection signal="pressed" from="UI/PauseMenu/VBoxContainer/RetryButton" to="ActivePiece" method="_on_retry_button_pressed"]
 [connection signal="mouse_entered" from="UI/PauseMenu/VBoxContainer/QuitButton" to="ActivePiece" method="_on_quit_button_mouse_entered"]
 [connection signal="pressed" from="UI/PauseMenu/VBoxContainer/QuitButton" to="ActivePiece" method="_on_quit_button_pressed"]
+[connection signal="mouse_entered" from="UI/PauseButton" to="ActivePiece" method="_on_pause_button_mouse_entered"]
+[connection signal="pressed" from="UI/PauseButton" to="ActivePiece" method="_on_pause_button_pressed"]
 [connection signal="value_changed" from="HSlider" to="." method="_on_h_slider_value_changed"]

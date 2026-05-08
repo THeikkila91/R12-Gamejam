@@ -137,14 +137,14 @@ func _process(delta):
 func pause_game():
 	# Näytetään pause-valikko (Varmista että polku on oikea!)
 	# Jos PauseMenu on UI-noden alla: $"../UI/PauseMenu".show()
-	var pause_menu = get_tree().root.find_child("PauseMenu", true, false)
+	pause_menu = get_tree().root.find_child("PauseMenu", true, false)
 	if pause_menu:
 		pause_menu.show()
 		get_tree().paused = true
 
 func _on_continue_button_pressed():
 	# Tämä funktio kytketään Continue-napin 'pressed'-signaaliin
-	var pause_menu = get_tree().root.find_child("PauseMenu", true, false)
+	pause_menu = get_tree().root.find_child("PauseMenu", true, false)
 	if pause_menu:
 		pause_menu.hide()
 	get_tree().paused = false
@@ -160,7 +160,7 @@ func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
 
 
 func spawn_piece():
-	current_pos = Vector2i(5, 1)
+	current_pos = Vector2i(5, 0)
 	var next_data = next_pieces_queue.pop_front()
 	current_shape = shapes[next_data["type"]]
 	current_color_index = next_data["color"]
@@ -243,6 +243,12 @@ func _on_retry_button_mouse_entered():
 func _on_quit_button_mouse_entered():
 	get_parent().get_node("HoverSound").play()
 
+func _on_pause_button_mouse_entered():
+	get_parent().get_node("HoverSound").play()
+
+func _on_pause_button_pressed():
+	pause_game()
+
 func draw_active_piece():
 	clear()
 	
@@ -256,9 +262,12 @@ func draw_active_piece():
 		set_cell(ghost_pos + cell, 1, Vector2i(current_color_index, 0))
 	
 	# 3. Piirrä oikea "Active Piece"
+	
 	for cell in current_shape:
+		var draw_pos = current_pos + cell
+		if draw_pos.y >= 0: # Piirtää palikan ainoastaan näkyville ruuduille
 		#käytetään arvottua väri-indeksiä poimimaan oikea ruutu tilesetistä
-		set_cell(current_pos + cell, 0, Vector2i(current_color_index, 0))
+			set_cell(current_pos + cell, 0, Vector2i(current_color_index, 0))
 
 
 func move_horizontal(dir: int):
