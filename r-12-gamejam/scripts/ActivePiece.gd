@@ -222,10 +222,15 @@ func game_over():
 	#palikoiden pysäytys
 	set_process(false) 
 	fall_timer.stop() 
+	
+	var ui_node = get_node("../ScoreUI")
+	if ui_node:
+		ui_node.check_for_new_highscore()
+	
 	#gameover ruutu näkyviin 
 	if game_over_menu:
 		game_over_menu.show()
-	
+
 #nappulat
 func _on_retry_button_pressed():
 	#ottaa paussin pois
@@ -329,6 +334,8 @@ func check_full_rows():
 		
 		if is_full:
 			get_parent().get_node("ExplodeSound").play()
+			play_clear_animation(y) # Pelaa flash efekti
+			await get_tree().create_timer(0.1).timeout # Pieni paussi
 			delete_row_and_shift(y) #tässä tuhotaan ja pudotetaan
 			rows_cleared += 1
 		else:
@@ -349,15 +356,42 @@ func delete_row_and_shift(row_to_clear: int):
 			pohja_layer.set_cell(Vector2i(x, y), source_id, atlas_coords)
 			pohja_layer.set_cell(Vector2i(x, y - 1), -1)
 
+func play_clear_animation(row: int):
+	var flash = ColorRect.new()
+	add_child(flash)
+	
+	# Muuttaa valo efektiä
+	flash.position = Vector2(0, row * 32) 
+	flash.size = Vector2(10 * 32, 32)
+	flash.color = Color(1, 1, 1, 0.8)
+	
+	var tween = create_tween()
+	# Häivytä ja poista se 0,2 sekunnissa
+	tween.tween_property(flash, "modulate:a", 0.0, 0.2)
+	tween.tween_callback(flash.queue_free)
+
+
+func apply_shake(strength: float = 4.0):
+	var camera = get_viewport().get_camera_2d()
+	if camera:
+		var tween = create_tween()
+		for i in range(4):
+			var offset = Vector2(randf_range(-strength, strength), randf_range(-strength, strength))
+			tween.tween_property(camera, "offset", offset, 0.05)
+		tween.tween_property(camera, "offset", Vector2.ZERO, 0.05)
+
 
 func calculate_score(amount: int):
 	total_lines_cleared += amount
+	
+	apply_shake(amount * 3.0)
 	
 	var points = 0
 	if amount == 1: points = 100
 	elif amount == 2: points = 300
 	elif amount == 3: points = 500
 	elif amount == 4: points = 800
+	
 	
 	var earned_points = points * level
 	lines_cleared.emit(earned_points, amount)
