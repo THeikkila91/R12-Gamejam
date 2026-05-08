@@ -20,6 +20,9 @@ var can_swap: bool = true
 var lock_delay_timer: float = 0.0
 var lock_delay_max: float = 0.5
 var is_touching_ground: bool = false
+var lock_reset_count: int = 0
+const MAX_LOCK_RESETS: int = 10 
+var current_type_name: String = ""
 
 var current_pos: Vector2i
 var current_shape: Array
@@ -84,7 +87,9 @@ func rotate_piece():
 	if can_move_with_shape(current_pos, new_shape):
 		current_shape = new_shape
 		if is_touching_ground:
-			lock_delay_timer = 0.0
+			if lock_reset_count < MAX_LOCK_RESETS:
+				lock_reset_count += 1
+				lock_delay_timer = 0.0
 		draw_active_piece()
 		get_parent().get_node("RotateSound").play()
 		
@@ -162,7 +167,8 @@ func can_move_with_shape(target_pos: Vector2i, shape_to_test: Array) -> bool:
 func spawn_piece():
 	current_pos = Vector2i(5, 0)
 	var next_data = next_pieces_queue.pop_front()
-	current_shape = shapes[next_data["type"]]
+	current_type_name = next_data["type"]
+	current_shape = shapes[current_type_name]
 	current_color_index = next_data["color"]
 	if not can_move(current_pos):
 		game_over()
@@ -177,7 +183,7 @@ func swap_piece():
 	
 	clear()
 	
-	var old_current_data = {"type": get_current_type_name(), "color": current_color_index}
+	var old_current_data = {"type": current_type_name, "color": current_color_index}
 	
 	if held_piece_data == null: # Ensimmäinen vaihto hold laatikkoon ja luo uuden palikan
 		held_piece_data = old_current_data
@@ -188,18 +194,13 @@ func swap_piece():
 		held_piece_data = old_current_data
 		# Vaihtaa hold laatikosta nykyiseen
 		current_pos = Vector2i(5, 1)
-		current_shape = shapes[temp["type"]]
+		current_type_name = temp["type"]
+		current_shape = shapes[current_type_name]
 		current_color_index = temp["color"]
 		draw_active_piece()
 	
 	can_swap = false # Lukitse vaihtaminen kunnes seuraava palikka on maassa (lukittu)
 	draw_hold_display()
-
-func get_current_type_name() -> String:
-	for key in shapes.keys():
-		if shapes[key] == current_shape:
-			return key
-	return "I"
 
 func draw_hold_display():
 	if hold_display and held_piece_data:
@@ -275,7 +276,12 @@ func move_horizontal(dir: int):
 	if can_move(next_pos):
 		current_pos = next_pos
 		if is_touching_ground:
-			lock_delay_timer = 0.0
+			if lock_reset_count < MAX_LOCK_RESETS:
+				lock_reset_count += 1
+				lock_delay_timer = 0.0 # Resetoi ajastimen
+			else:
+				pass # Jos limiitti on saavutettu, ei resetoida ajastinta enää 
+					 # = palikka lukittuu
 		draw_active_piece()
 
 func move_down(is_manual: bool = false):
@@ -307,6 +313,7 @@ func lock_piece():
 	clear()
 	get_parent().get_node("DropSound").play()
 	check_full_rows()
+	lock_reset_count = 0 # resetoi lukitus ajastimen laskun seuraavalle palikalle
 	can_swap = true # Mahdollistaa vaihdon seuraavalle palikalle 
 	spawn_piece()
 
@@ -355,7 +362,7 @@ func calculate_score(amount: int):
 	var earned_points = points * level
 	lines_cleared.emit(earned_points, amount)
 	
-	print("You got ", points, " points!")
+	print("Sait ", earned_points, " pistettä! (", amount, " rivi)")
 	show_points_popup(earned_points)
 	
 	if total_lines_cleared >= level * 5:
