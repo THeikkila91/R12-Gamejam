@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://b7oc5tv2mw0he"]
+[gd_scene load_steps=43 format=3 uid="uid://b7oc5tv2mw0he"]
 
 [ext_resource type="Script" uid="uid://cxt7cswghqqm8" path="res://scripts/game.gd" id="1_lbhrr"]
 [ext_resource type="Shader" uid="uid://d4ifb4k21wd16" path="res://game.gdshader" id="1_yqjtg"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://4366uhvbhue0" path="res://assets/T_Space_Key_White.png" id="14_e1j6l"]
 [ext_resource type="AudioStream" uid="uid://b4ewfffnt54f6" path="res://Gameover.mp3" id="14_ir15t"]
 [ext_resource type="AudioStream" uid="uid://74k1qh2n0kbx" path="res://Hover.mp3" id="15_ca42v"]
+[ext_resource type="Texture2D" uid="uid://xccw1pd4bnhn" path="res://assets/T_Esc_Key_White.png" id="15_pl11u"]
 [ext_resource type="Texture2D" uid="uid://cgf1o7qs8vfy6" path="res://assets/speaker-volume-button_61978.png" id="16_e1j6l"]
 [ext_resource type="AudioStream" uid="uid://knos4hi6auq5" path="res://Buttonpress.mp3" id="16_rysoc"]
 
@@ -274,7 +275,7 @@ layout_mode = 2
 [node name="HighscoreLabel" type="Label" parent="UI/GameOverMenu/VBoxContainer/HighscorePanel/MarginContainer/GameOverHighscoreContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
-text = "Highscores"
+text = "HIgh scores"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -394,7 +395,7 @@ layout_mode = 2
 [node name="HighscoreLabel" type="Label" parent="UI/PauseMenu/VBoxContainer/HighscorePanel/MarginContainer/HighscoreContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
-text = "Highscores"
+text = "High scores"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -509,8 +510,8 @@ vertical_alignment = 1
 layout_mode = 0
 offset_left = 398.0
 offset_top = 243.0
-offset_right = 737.0
-offset_bottom = 449.0
+offset_right = 711.0
+offset_bottom = 491.0
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/KeyBindsPanel"]
 layout_mode = 2
@@ -627,6 +628,24 @@ offset_right = 138.0
 offset_bottom = 35.333336
 size_flags_horizontal = 8
 text = "Drop down"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="UI/KeyBindsPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="UI/KeyBindsPanel/MarginContainer/VBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture = ExtResource("15_pl11u")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="UI/KeyBindsPanel/MarginContainer/VBoxContainer/VBoxContainer2/TextureRect"]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 13.0
+offset_right = 127.0
+offset_bottom = 35.333336
+text = "Pause"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_u5sy4")
